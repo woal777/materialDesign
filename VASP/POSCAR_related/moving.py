@@ -6,5 +6,5 @@ for j, i in enumerate(s.sites):
     if 0.8 < i.c:
         indices.append(j)
 
-s.translate_sites(indices, [0, 0, 0.1], frac_coords=False)
+s.translate_sites(indices, [0, 0, -0.1], frac_coords=False)
 s.to('POSCAR', 'POSCAR')
