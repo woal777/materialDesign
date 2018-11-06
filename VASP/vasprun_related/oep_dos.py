@@ -58,13 +58,12 @@ if __name__ == "__main__":
     en = {'first': (0.25, 0.31),
           }
     for key, val in en.items():
-        s: PeriodicSite = None
         dosN = Dos(cdos.efermi, cdos.energies, {k: np.zeros(d.shape) for k, d in cdos.densities.items()})
         dosMetal = Dos(cdos.efermi, cdos.energies, {k: np.zeros(d.shape) for k, d in cdos.densities.items()})
         for s in find_ind(cdos.structure, *val):
             if s.specie.__str__() == 'N':
                 sum_orbital(dosN, cdos.get_site_spd_dos(s)[OrbitalType.p])
-            elif s.specie.__str__() == 'Ni':
+            elif s.specie.__str__() == 'Cu':
                 sum_orbital(dosMetal, cdos.get_site_spd_dos(s)[OrbitalType.d])
 
         dosN.densities = dosN.get_densities()
