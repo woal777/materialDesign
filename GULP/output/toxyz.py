@@ -1,5 +1,5 @@
 arr = []
-path = '/home/jinho93/slab/LAO/nvt/'
+path = '/home/jinho93/slab/LAO/nvt/island/dipole_effect/'
 with open(path + 'example15.grs') as f:
     for l in f:
         if l.__contains__('core'):

@@ -1,7 +1,7 @@
 from pymatgen import Structure
 from pymatgen.command_line.gulp_caller import GulpIO, GulpCaller
 import sys
-path = '/home/jinho93/slab/LAO/nvt/'
+path = '/home/jinho93/slab/LAO/nvt/line/'
 s: Structure = Structure.from_file(path + '/SPOSCAR-reduced')
 gio = GulpIO()
 sys.stdout = open(path + 'md.gin', 'w')
