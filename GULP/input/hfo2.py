@@ -6,7 +6,7 @@ from matplotlib import pyplot
 mpr = MPRester()
 mono: Structure = mpr.get_structure_by_material_id('mp-352')
 s = mpr.get_structures('ZrO2')
-sortho: Structure = mpr.get_structure_by_material_id('mp-685097')
+ortho: Structure = mpr.get_structure_by_material_id('mp-685097')
 tetra: Structure = mpr.get_structure_by_material_id('mp-1018721')
 for j, i in enumerate(mono.sites):
     if str(i.specie) == 'Hf':
