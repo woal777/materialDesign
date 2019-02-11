@@ -1,6 +1,7 @@
 import numpy as np
-
-with open('/home/jinho93/oxides/perobskite/lanthanum-aluminate/slab/nvt.para.6/island/19/step2/lao.xyz') as f:
+import os
+os.chdir('/home/jinho93/oxides/perobskite/lanthanum-aluminate/slab/nvt.para.6/island/19/step2')
+with open('lao.xyz') as f:
     lines = f.readlines()
     n = int(lines[0]) + 2
     snapshot = []
