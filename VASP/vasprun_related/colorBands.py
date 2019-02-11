@@ -1,10 +1,11 @@
 from pymatgen.electronic_structure.plotter import BSPlotterProjected
-from pymatgen.io.vasp.outputs import BSVasprun
-vrun = BSVasprun('/home1/jinho/HfO2/Pca21_material_project/PBE/bulk/bands/GXSYG/'+'vasprun.xml', True, True)
-bs = vrun.get_band_structure('/home1/jinho/HfO2/Pca21_material_project/PBE/bulk/bands/GXSYG/'+'KPOINTS')
+from pymatgen.io.vasp.outputs import BSVasprun, Element
+path = '/home/jinho93/oxides/amorphous/igzo/band/'
+vrun = BSVasprun(path+'vasprun.xml', True, True)
+bs = vrun.get_band_structure(path+'KPOINTS')
 plotter = BSPlotterProjected(bs)
-plt = plotter.get_elt_projected_plots_color()
+plt = plotter.get_plot(ylim=(0, 5), vbm_cbm_marker=True)
+#plt = plotter.get_elt_projected_plots_color(elt_ordered=[Element.O, Element.In, Element.Ga])
 
-plt.xlim((.0, .5))
-plt.ylim((-4, 6))
+plt.ylim((0, 5))
 plt.show()

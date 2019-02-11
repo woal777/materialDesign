@@ -7,7 +7,7 @@ dos: CompleteDos = mpr.get_dos_by_material_id('mp-352')
 eldos = dos.get_element_dos()
 dsp = DosPlotter()
 dsp.add_dos_dict(eldos)
-dsp.show()
+dsp.show(ylim=(0, 5))
 arr = list()
 arr.append(dos.energies - dos.efermi)
 j: Dos
