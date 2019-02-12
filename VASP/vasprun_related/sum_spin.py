@@ -9,10 +9,11 @@ cdos = vrun.complete_dos
 pdos: dict = cdos.pdos
 arr = []
 for i, j in pdos.items():
-    if .45 < i.c < 0.55 and str(i.specie) == 'H':
-        arr.append(six.moves.reduce(add_densities, j.values()))
 
-arr = six.moves.reduce(add_densities, arr)
+    if .55 < i.c < 0.65:
+        arr.append(six.moves.reduce(add_densities, j.values()))  # reduced from atoms
+
+arr = six.moves.reduce(add_densities, arr)  # reduced from orbitals
 
 up = arr[Spin.up]
 down = arr[Spin.down]
