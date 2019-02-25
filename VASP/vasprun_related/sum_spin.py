@@ -9,7 +9,6 @@ cdos = vrun.complete_dos
 pdos: dict = cdos.pdos
 arr = []
 for i, j in pdos.items():
-
     if .55 < i.c < 0.65:
         arr.append(six.moves.reduce(add_densities, j.values()))  # reduced from atoms
 
