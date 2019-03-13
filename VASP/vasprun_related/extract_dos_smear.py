@@ -1,7 +1,5 @@
-from pymatgen import MPRester
 from pymatgen.io.vasp.outputs import CompleteDos, Dos, Spin, Vasprun
 import numpy as np
-from pymatgen.electronic_structure.plotter import DosPlotter
 import os
 
 normalize = False
@@ -23,15 +21,15 @@ for i, j in eldos.items():
     items.append(str(i))
     if vrun.is_spin:
         if normalize:
-            arr.append(np.concatenate((j.densities[Spin.up] / max(j.get_densities(Spin.up)),
-                                   np.flip(-j.densities[Spin.down]) / max(j.get_densities(Spin.down)))))
+            arr.append(np.concatenate((j.get_smeared_densities(0.05)[Spin.up] / max(j.get_smeared_densities(0.05)[Spin.up]),
+                                   np.flip(-j.get_smeared_densities(0.05)[Spin.down]) / max(j.get_smeared_densities(0.05)[Spin.down]))))
         else:
-            arr.append(np.concatenate((j.densities[Spin.up],
-                                       np.flip(-j.densities[Spin.down]))))
+            arr.append(np.concatenate((j.get_smeared_densities(0.05)[Spin.up],
+                                       np.flip(-j.get_smeared_densities(0.05)[Spin.up]))))
     else:
         if normalize:
-            arr.append(j.densities[Spin.up] / max(j.get_densities(Spin.up)))
+            arr.append(j.get_smeared_densities(0.05)[Spin.up] / max(j.get_smeared_densities(0.05)[Spin.up]))
         else:
-            arr.append(j.densities[Spin.up])
+            arr.append(j.get_smeared_densities(0.05)[Spin.up])
 arr = np.array(arr)
 np.savetxt('output.dat', arr.transpose(), fmt='%.9e', delimiter='    ', header=' '.join(items))
