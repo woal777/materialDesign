@@ -1,11 +1,8 @@
-from pymatgen import MPRester
+#!/home/jinho93/miniconda3/envs/my_pymatgen/bin/python
 from pymatgen.io.vasp.outputs import CompleteDos, Dos, Spin, Vasprun
 import numpy as np
-from pymatgen.electronic_structure.plotter import DosPlotter
-import os
 
 normalize = False
-os.chdir('/home/backup/jinho93/molecule/DDT/moli/top/relax/re/dos/dense/morebands')
 vrun = Vasprun('vasprun.xml')
 # mpr = MPRester('DhmFQPuibZo8JtXn')
 dos = vrun.complete_dos
