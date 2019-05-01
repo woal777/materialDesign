@@ -14,13 +14,12 @@ class Slab:
         self.displacement = -0.1
 
     def main(self):
-        print('main')
         while True:
             if os.path.exists(os.curdir + '/stop'):
                 break
             self.loop()
             self.n += 1
-            break
+            print(self.n)
 
     def loop(self):
         if not os.path.exists(f'conf{self.n}'):
@@ -29,7 +28,14 @@ class Slab:
             shutil.copy('KPOINTS', f'conf{self.n}')
             shutil.copy('POTCAR', f'conf{self.n}')
             self.s.to('POSCAR', f'conf{self.n}/POSCAR')
+            self.move()
+            if self.n > 0:
+                shutil.copy2(f'conf{self.n - 1}/CHGCAR', f'conf{self.n}')
+                shutil.copy2(f'conf{self.n - 1}/WAVECAR', f'conf{self.n}')
             pathlib.Path(f'conf{self.n}/wait').touch()
+        else:
+            self.s = Structure.from_file(f'conf{self.n}/POSCAR')
+            self.move()
         os.chdir(f'conf{self.n}')
         self.calculate()
         os.chdir('..')
@@ -38,19 +44,13 @@ class Slab:
         if len(self.output) > 2:
             if self.output[-1] - self.output[-2] > 0:
                 self.displacement = -self.displacement / 2
-            self.move()
-        while True:
+        if os.path.exists('finish'):
+            self.add_output()
+            return 0
+        while not os.path.exists('finish'):
             try:
-                with open('report.vasp') as stdio:
-                    output = stdio.read()
-                    if output.__contains__('F='):
-                        for i in output.split('\n'):
-                            if re.search('F=', i):
-                                self.output.append(float(i.split()[2]))
-                                break
-                    else:
-                        continue
-                        time.sleep(3)
+                self.add_output()
+                time.sleep(3)
             except FileNotFoundError:
                 time.sleep(3)
                 pass
@@ -60,7 +60,15 @@ class Slab:
         for i, site in enumerate(self.s.sites):
             if str(site.specie) == 'Pt':
                 ind.append(i)
-        self.s.translate_sites(ind, (0, 0, self.displacement))
+        self.s.translate_sites(ind, (0, 0, self.displacement), frac_coords=False)
+
+    def add_output(self):
+        with open('report.vasp') as stdio:
+            output = stdio.read()
+            for i in output.split('\n'):
+                if re.search('F=', i):
+                    self.output.append(float(i.split()[2]))
+                    pathlib.Path('finish').touch()
 
 
 if __name__ == '__main__':

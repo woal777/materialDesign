@@ -3,13 +3,13 @@ from pymatgen.electronic_structure.plotter import DosPlotter
 from pymatgen.util.plotting import get_axarray_fig_plt, pretty_plot
 import numpy as np
 import os
-os.chdir('/home/ksrc5/FTJ/bfo/for_test/vasp')
+os.chdir('/home/ksrc5/FTJ/bfo/111-dir/junction/sto/vasp/orig/new_vca/opti')
 vrun = Vasprun('vasprun.xml')
 s: Structure = vrun.final_structure
 cdos = vrun.complete_dos
 pdos = cdos.pdos
 doss = dict()
-num = 8
+num = 16
 arr = np.linspace(0, 1, num, endpoint=False)
 darr = arr[1] - arr[0]
 for j in arr:
