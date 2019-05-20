@@ -5,7 +5,6 @@ from MDAnalysis import Universe
 from MDAnalysis.coordinates.XYZ import XYZWriter
 from MDAnalysis.core.groups import Atom, AtomGroup
 import matplotlib.pyplot as plt
-os.chdir('/home/jinho93/oxides/cluster/zno')
 
 
 def step_func(a, v):

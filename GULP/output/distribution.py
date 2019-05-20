@@ -36,13 +36,13 @@ class Anim:
                     data.append(k[2])
                 else:
                     data2.append(k[2])
-        hist, bin_edges = np.histogram(data, bins=np.arange(0, 66, 2.60345))
+        hist, bin_edges = np.histogram(data, bins=np.arange(-0.00003, 60, 2.5984))
         oy = hist
         ox = np.linspace(0, 60, len(oy))
         self.output.append(ox)
         self.output.append(oy)
         self.line.set_data(ox, oy)
-        hist, bin_edges = np.histogram(data2, bins=np.arange(0, 66, 2.60345))
+        hist, bin_edges = np.histogram(data2, bins=np.arange(-0.00003, 60, 2.5984))
         zny = hist
         znx = np.linspace(0, 60, len(zny))
         self.output.append(zny)
@@ -52,11 +52,12 @@ class Anim:
 
 
 if __name__ == '__main__':
-    os.chdir('/home/jinho93/oxides/cluster/zno/rnd_line')
-    f = open('output.xyz')
-    u = Universe(f)
-    anim = Anim(u)
-    anim.init()
-    anim.animate(-1)
-    np.savetxt('output.dat', np.array(anim.output).transpose())
-    anim.fig.show()
+    os.chdir('/home/jinho93/oxides/cluster/zno/gulp/whitmore/line/conf4/')
+    with open('output.xyz') as f:
+        u = Universe(f)
+        anim = Anim(u)
+        anim.init()
+        anim.animate(0)
+        print(anim.output)
+        np.savetxt('output.dat', np.array(anim.output).transpose())
+        anim.fig.show()

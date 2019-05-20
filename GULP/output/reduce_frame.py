@@ -7,10 +7,10 @@ with open('cluster.xyz') as f:
     for a in range(len(lines) // n):
         snapshot.append(lines[a*n:(a + 1)*n])
     for i, j in enumerate(snapshot[0]):
-        if float(j.split()[-1]) > 50:
-            if j.__contains__('N'):
+        if float(j.split()[-1]) > 62:
+            if j.__contains__('O'):
                 for k in range(len(snapshot)):
-                    snapshot[k][i] = snapshot[k][i].replace('O', 'N')
+                    snapshot[k][i] = snapshot[k][i].replace('O', 'F')
             elif j.__contains__('Zn'):
                 for k in range(len(snapshot)):
                     snapshot[k][i] = snapshot[k][i].replace('Zn', 'Ni')

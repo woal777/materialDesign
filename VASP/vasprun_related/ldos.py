@@ -4,7 +4,7 @@ import os
 import numpy as np
 
 if __name__ == '__main__':
-    os.chdir('/home/ksrc5/FTJ/bfo/111-dir/junction/sto/vasp/orig/new_vca/opti')
+    os.chdir('/home/ksrc5/FTJ/bfo/111-dir/junction/sto/vasp/vac/conf3/node03')
     vrun = Vasprun('vasprun.xml')
     s = vrun.final_structure
     c_arr = np.linspace(0, 1, 20)
