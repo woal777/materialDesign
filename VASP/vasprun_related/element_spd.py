@@ -1,4 +1,6 @@
 #!/home/jinho93/miniconda3/envs/my_pymatgen/bin/python
+from pymatgen import Element
+from pymatgen.electronic_structure.core import OrbitalType
 from pymatgen.io.vasp.outputs import CompleteDos, Dos, Spin, Vasprun
 import numpy as np
 
@@ -7,21 +9,20 @@ vrun = Vasprun('vasprun.xml')
 # mpr = MPRester('DhmFQPuibZo8JtXn')
 dos = vrun.complete_dos
 # dos: CompleteDos = mpr.get_dos_by_material_id('mp-352')
-eldos = dos.get_element_dos()
+
 arr = list()
 if vrun.is_spin:
     arr.append(np.concatenate((dos.energies - dos.efermi,
                                np.flip(dos.energies) - dos.efermi)))
-    arr.append(np.concatenate((vrun.tdos.densities[Spin.up],
-                               np.flip(-vrun.tdos.densities[Spin.down]))))
 else:
     arr.append(dos.energies - dos.efermi)
-    arr.append(vrun.tdos)
-
 j: Dos
-items = ['tot']
-
-for i, j in eldos.items():
+items = []
+for i in set(vrun.final_structure.species):
+    if i == Element.O or i == Element.N:
+        j = dos.get_element_spd_dos(i)[OrbitalType.p]
+    else:
+        j = dos.get_element_spd_dos(i)[OrbitalType.d]
     items.append(str(i))
     if vrun.is_spin:
         if normalize:

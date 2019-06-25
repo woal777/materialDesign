@@ -43,5 +43,6 @@ for j in arr:
     if j[0] == 'La':
         num_la += 1
     p += j[3] * atom(j[0]) * e * 1e-8
-for i in p_arr:
+
+for i in p_arr[::-1]:
     print(i / vol)

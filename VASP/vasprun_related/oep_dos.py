@@ -1,3 +1,5 @@
+import os
+
 from pymatgen.io.vasp import Structure, Vasprun, Dos, Spin, OrbitalType
 from pymatgen.core import PeriodicSite
 import numpy as np
@@ -52,29 +54,29 @@ def sum_orbital(dos: Dos, dos2: Dos):
 
 
 if __name__ == "__main__":
+    os.chdir('/home/jinho93/molecule/oep-sub_fe/110-oxygen/4-third/30_amin/gr')
     vrun = Vasprun('vasprun.xml')
     cdos = vrun.complete_dos
     dp = DosPlotter()
-    en = {'first': (0.25, 0.31),
+    en = {'first': (0.3, 0.38),
           }
     for key, val in en.items():
         dosN = Dos(cdos.efermi, cdos.energies, {k: np.zeros(d.shape) for k, d in cdos.densities.items()})
         dosMetal = Dos(cdos.efermi, cdos.energies, {k: np.zeros(d.shape) for k, d in cdos.densities.items()})
         for s in find_ind(cdos.structure, *val):
-            if s.specie.__str__() == 'N':
+            if s.specie.__str__() == 'O':
                 sum_orbital(dosN, cdos.get_site_spd_dos(s)[OrbitalType.p])
-            elif s.specie.__str__() == 'Cu':
-                sum_orbital(dosMetal, cdos.get_site_spd_dos(s)[OrbitalType.d])
+            elif s.specie.__str__() == 'Fe':
+                sum_orbital(dosMetal, cdos.get_site_spd_dos(s)[OrbitalType.s])
 
-        dosN.densities = dosN.get_densities()
-        dosMetal.densities = dosMetal.get_densities()
-
-        sum_spin(dosN)
-        sum_spin(dosMetal)
-
-        dosN = integrate(dosN)
-        dosMetal = integrate(dosMetal)
-
+        #sum_spin(dosN)
+        #sum_spin(dosMetal)
+        dosN.densities = dosN.get_smeared_densities(0.05)
+        dosMetal.densities = dosMetal.get_smeared_densities(0.05)
+        #dosN = integrate(dosN)
+        #dosMetal = integrate(dosMetal)
+        write_dos(key + 'dosN.dat', dosN)
+        write_dos(key + 'dosM.dat', dosMetal)
         dp.add_dos_dict({key+"dosN": dosN, key + "dosM": dosMetal})
     dp.show()
     # write_dos(key + '_N_mag.dat', integrate(dosN))

@@ -27,7 +27,7 @@ with open('POSCAR.xyz') as f,\
     zinc = []
     for j, i in enumerate(u.atoms):
         if i.atomic_name == 'Zn':
-            if rnd[j] > 0.1 * step_func(i.position[2], m / 2):
+            if rnd[j] > 0.3 * step_func(i.position[2], m / 2):
                 zinc.append(j)
             else:
                 n += 1
