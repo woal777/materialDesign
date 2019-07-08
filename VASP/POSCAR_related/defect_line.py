@@ -20,7 +20,7 @@ if __name__ == '__main__':
     zinc = []
     for j, i in enumerate(s.sites):
         if i.species_string == 'Zn':
-            if rnd[j] < 0.2 * step_func(i.c, m):
+            if rnd[j] < 0.4 * step_func(i.c, m):
                 zinc.append(j)
             else:
                 n += 1
