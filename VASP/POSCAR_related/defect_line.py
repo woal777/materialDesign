@@ -13,6 +13,7 @@ def step_func(a, v):
 if __name__ == '__main__':
     s = Structure.from_file('POSCAR.ini')
     rnd = np.random.rand(len(s.sites))
+    s.density
     m = .48
     n = 0
     ind = []

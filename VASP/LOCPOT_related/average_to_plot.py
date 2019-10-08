@@ -2,11 +2,13 @@ import macrodensity as md
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
+import os
 
+os.chdir('/home/ksrc5/FTJ/1.bfo/111-dir/junction/sto/vasp/vac/conf3/4.node03/dense_k_dos/again/2.parchg')
 input_file = ''
 lattice_vector = 2.735
 
-vasp_pot, NGX, NGY, NGZ, Lattice = md.read_vasp_density(input_file + 'LOCPOT')
+vasp_pot, NGX, NGY, NGZ, Lattice = md.read_vasp_density(input_file + 'PARCHG')
 vector_a, vector_b, vector_c, av, bv, cv = md.matrix_2_abc(Lattice)
 resolution_x = vector_a / NGX
 resolution_y = vector_b / NGY
@@ -31,5 +33,5 @@ ax1.set_xlim(0, 1)
 ax1.grid(True)
 
 ax1.legend(fontsize=22)
-np.savetxt('planar.dat',macro)
+np.savetxt('planar.dat',planar)
 plt.show('loc.png')

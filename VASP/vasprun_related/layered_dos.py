@@ -4,6 +4,7 @@ import numpy as np
 from pymatgen.io.vasp import Vasprun
 from pymatgen.io.vasp.outputs import Spin
 
+os.chdir('/home/ksrc5/FTJ/1.bfo/111-dir/junction/sto/vasp/vac/conf3/4.node03/dense_k_dos/again/3.ca/dos')
 v = Vasprun(os.path.abspath(os.curdir) + '/vasprun.xml')
 
 c = v.complete_dos

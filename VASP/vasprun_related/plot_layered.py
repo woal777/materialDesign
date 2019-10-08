@@ -3,7 +3,10 @@ from pymatgen.electronic_structure.plotter import DosPlotter
 from pymatgen.util.plotting import get_axarray_fig_plt, pretty_plot
 import numpy as np
 import os
-os.chdir('/home/ksrc5/FTJ/bfo/111-dir/junction/sto/vasp/orig/new_vca/opti')
+os.chdir('/home/ksrc5/FTJ/1.bfo/111-dir/junction/sto/vasp/orig/new_vca/dos2')
+os.chdir('/home/ksrc5/FTJ/1.bfo/111-dir/junction/sto/vasp/vac/conf3/3.node03')
+os.chdir('/home/ksrc5/FTJ/1.bfo/111-dir/junction/sto/vasp/vac/conf3/4.node03/dense_k_dos/again')
+
 vrun = Vasprun('vasprun.xml')
 s: Structure = vrun.final_structure
 cdos = vrun.complete_dos
@@ -27,7 +30,7 @@ for i in range(num):
     a = doss.popitem()
     dsp.add_dos(*a)
     fig.add_subplot(num, 1, i + 1)
-    subplt = dsp.get_plot(xlim=(-5, 3), plt=plt)
+    subplt = dsp.get_plot(xlim=(-1, 2), plt=plt)
 plt.savefig('figure.png')
 plt.show()
 
