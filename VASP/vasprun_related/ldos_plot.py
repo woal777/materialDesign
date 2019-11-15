@@ -3,14 +3,13 @@ import numpy as np
 from pymatgen.electronic_structure.plotter import DosPlotter
 from pymatgen.util.plotting import get_axarray_fig_plt, pretty_plot
 
-arr = np.genfromtxt('/home/jinho93/materials/oxides/fluorite/2.zirconia/5.vac_in_center/dos/output.dat')
-print(arr)
+arr = np.genfromtxt('output.dat')
 num = len(arr[0])
-ax_array, fig, plt = get_axarray_fig_plt(None, nrows=num, sharex=True)
-plt = pretty_plot(12, 6, plt=plt)
+ax_array, fig, plt = get_axarray_fig_plt(None, ncols=num, sharex=True)
+plt = pretty_plot(12, 12, plt=plt)
 for i in range(1, num):
-    fig.add_subplot(num, 1, i + 1)
-    plt.plot(arr[:,0], arr[:,i])
-    plt.xlim((-5, 5))
+    fig.add_subplot(1, num, i + 1)
+    plt.plot(arr[:, i], arr[:, 0])
+    plt.ylim((-5, 5))
 plt.savefig('figure.png')
 plt.show()

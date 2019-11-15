@@ -38,12 +38,14 @@ def spg():
     spg = SpacegroupAnalyzer(s)
     print(spg.get_space_group_number())
 
+
 def rumpling():
-    s = Structure.from_file('POSCAR')
+    s = Structure.from_file('CONTCAR')
     for site in s.sites:
-        if site.species_string is 'Ti':
+        if site.species_string is 'Hf':
             tmp_z = 0
             n = 0
+            print(s.get_neighbors(site, 2.3))
             for near, dis in s.get_neighbors(site, 2.3):
 #                if abs(site.z - near.z) < 1:
                 tmp_z += near.z
@@ -52,7 +54,5 @@ def rumpling():
 
 
 if __name__ == '__main__':
-    os.chdir('/home/ksrc5/FTJ/1.bfo/001/cp2k/bulk')
-    os.chdir('/home/ksrc5/FTJ/1.bfo/111-dir/junction/sto/vasp/orig/new_vca/dos2')
-    os.chdir('/home/ksrc5/FTJ/1.bfo/111-dir/junction/sto/vasp/vac/conf3/4.node03/dense_k_dos/again')
+    os.chdir('/home/jinho93/oxides/fluorite/hafnia/pca21/vasp/2.constrained')
     rumpling()
