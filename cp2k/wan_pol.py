@@ -24,12 +24,13 @@ with open('report.cp2k') as f:
 u = Universe('wannier-HOMO_centers_s1-1_0.xyz')
 pol = np.zeros(3)
 new_coord = []
+print(z_eff)
 for c, a in zip(u.coord, u.atoms):
-    if c[2] < -2.5:
+    if c[2] < .162:
         c[2] += 5.1638688669733437
     if c[1] < -2.3:
         c[1] += 5.5572505783499953
     new_coord.append([a.name, *list(map(str, c))])
     pol += c * z_eff[a.name]
-np.savetxt('new_pol.xyz', np.array(new_coord), '%12s', header='60\n', comments='')
-print(pol / vol * 1.6022e-19 * 1e+20)
+np.savetxt('new_pol.xyz', np.array(new_coord), '%12s', header='44\n', comments='')
+print(pol[2] / vol * 1.6022e-19 * 1e+20)
