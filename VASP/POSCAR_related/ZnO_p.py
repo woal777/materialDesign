@@ -11,7 +11,8 @@ if __name__ == '__main__':
     os.chdir('/home/jinho93/oxides/cluster/zno/vasp/3.slab/2.80')
     os.chdir('/home/jinho93/oxides/cluster/zno/vasp/3.slab/1.zn_vac/3.LDIPOL_from_ini')
     os.chdir('/home/jinho93/oxides/cluster/zno/cp2k/3.slab/2.wann')
-    s = Structure.from_file('SPOSCAR')
+    os.chdir('/home/jinho93/oxides/cluster/zno/vasp/4.supc/1.fix/two')
+    s = Structure.from_file('CONTCAR')
     z_coords = []
     p = []
     for i in s.sites:

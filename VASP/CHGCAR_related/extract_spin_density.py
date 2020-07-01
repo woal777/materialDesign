@@ -1,5 +1,5 @@
 #!/home/jinho93/miniconda3/envs/my_pymatgen/bin/python
-with open('CHG') as f:
+with open('CHGCAR') as f:
     l = f.read()
     fr = l.find('\n \n')
     to = l.find('\n', fr + 5)

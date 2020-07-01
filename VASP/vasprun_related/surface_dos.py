@@ -21,12 +21,12 @@ for ind in s.sites:
         num2 += 1
 #    if (str(ind.specie) is 'Ti' and len(s.get_neighbors(ind, 2.2)) < 6)\
 #            or len(s.get_neighbors(ind, 2.2)) < 3:
-#        arr2.append(cdos.get_site_dos(ind).densities)
+#        arr2.append(complete_dos.get_site_dos(ind).densities)
 #        num2 += 1
 #    else:
-#        arr.append(cdos.get_site_dos(ind).densities)
+#        arr.append(complete_dos.get_site_dos(ind).densities)
 #        num += 1
-#dos = Dos(cdos.efermi, cdos.energies, six.moves.reduce(add_densities, arr))
+#dos = Dos(complete_dos.efermi, complete_dos.energies, six.moves.reduce(add_densities, arr))
 dos2 = Dos(cdos.efermi, cdos.energies, six.moves.reduce(add_densities, arr2))
 #dos.densities = {k: np.array(d / num) for k, d in dos.densities.items()}
 dos2.densities = {k: np.array(d / num2) for k, d in dos2.densities.items()}

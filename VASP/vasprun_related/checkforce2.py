@@ -1,4 +1,4 @@
-#!/home/jinho93/miniconda3/envs/my_pymatgen/bin/python
+#!/home/jinho93/miniconda3/bin/python
 from xml.etree.ElementTree import iterparse
 import sh
 import numpy as np
