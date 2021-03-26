@@ -43,4 +43,4 @@ for n, k in dos.items():
 #%%
 dx = cdos.energies[1] - cdos.energies[0]
 for d, j in dos.items():
-    print(d, sum(j.densities[Spin.up][np.logical_and(j.energies < 0, -2 < j.energies)]) * dx)
+    print(d, sum(j.densities[Spin.up][j.energies < 0]) * dx)
