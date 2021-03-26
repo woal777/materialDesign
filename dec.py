@@ -1,14 +1,14 @@
-def params(odlFunc):
-    def inside(*args, **kwargs):
-        print(args, kwargs)
-        return odlFunc(*args, **kwargs)
-    return inside
+#%%
+
+import matplotlib.pyplot as plt
 
 
-@params
-def mult(x, y):
-    print(x * y)
+x = range(5)
+y = range(5)
 
+plt.plot(x, y)
 
-if __name__ == '__main__':
-    mult(4, 4)
+# %%
+
+print(y)
+# %%

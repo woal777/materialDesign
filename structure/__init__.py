@@ -178,6 +178,8 @@ def inversion():
         s.translate_sites([j], -tvec)
     s.to('POSCAR', 'TPOSCAR')
 
+
+
 if __name__ == '__main__':
     os.chdir('/home/jinho93/oxides/perobskite/lead-titanate/paw/domain/afm')
 #    os.chdir('/home/jinho93/oxides/perobskite/strontium-titanate/slab/nbsto/0.superlattice/4.long/20uc/symm/4.two/1.dos')

@@ -47,12 +47,8 @@ if __name__ == "__main__":
     dosrun = Vasprun("./dos/vasprun.xml")
 
     # labels
-    labels = [u"$\\Gamma$", u"$X$", u"$\\Gamma$"]
-    step = 150
 
     # general options for plot
-    font = {'family': 'serif', 'size': 24}
-    plt.rc('font', **font)
 
     # set up 2 graph with aspec ration 2/1
     # plot 1: bands diagram
@@ -160,4 +156,5 @@ if __name__ == "__main__":
 
     # Plotting
     # -----------------
+    plt.show()
     plt.savefig(sys.argv[0].strip(".py") + ".pdf", format="pdf")

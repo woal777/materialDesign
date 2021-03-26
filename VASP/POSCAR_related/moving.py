@@ -1,10 +1,8 @@
 from pymatgen.io.vasp.outputs import Structure
+import os
 
+os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/bulk/hse/polaron')
 s = Structure.from_file('POSCAR')
-indices = []
-for j, i in enumerate(s.sites):
-    if 0.8 < i.c:
-        indices.append(j)
 
-s.translate_sites(indices, [0, 0, -0.1], frac_coords=False)
+s.translate_sites(range(len(s.sites)), [0.5, 0.5, 0], frac_coords=True)
 s.to('POSCAR', 'POSCAR')

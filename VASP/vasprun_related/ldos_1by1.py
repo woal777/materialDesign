@@ -1,3 +1,5 @@
+#%%
+
 from math import ceil
 
 from pymatgen import Spin
@@ -6,7 +8,7 @@ import numpy as np
 import os
 
 if __name__ == '__main__':
-    os.chdir('/home/jinho93/interface/pzt-bso/loose/opti/dos')
+    os.chdir('/home/jinho93/oxides/perobskite/lanthanum-aluminate/slab/14')
     vrun = Vasprun('vasprun.xml')
     s = vrun.final_structure
     cdos = vrun.complete_dos
@@ -15,24 +17,43 @@ if __name__ == '__main__':
         if i.species_string == 'O':
             n += 1
     n = ceil(n / 3)
+    repeat = 5
+    if repeat == 4:
+        n = 4
     if vrun.is_spin:
         dos_arr = np.zeros((n + 1, len(vrun.tdos.densities[Spin.up]) * 2))
         dos_arr[0] = np.concatenate(((vrun.tdos.energies - vrun.tdos.efermi), (vrun.tdos.energies - vrun.tdos.efermi)[::-1]))
     else:
         dos_arr = np.zeros((n + 1, len(vrun.tdos.densities[Spin.up])))
         dos_arr[0] = (vrun.tdos.energies - vrun.tdos.efermi)
-    for i, j in enumerate(sorted([r for r in s.sites if r.species_string != 'Zr'], key=lambda site: site.z)):
+    if n == 4:
+        atoms = [r for r in s.sites if r.species_string == 'Pt'][2:]
+    else:
+        atoms = [r for r in s.sites
+                 if r.species_string != 'Pt' and r.species_string != 'Sr']
+
+    for i, j in enumerate(sorted(atoms, key=lambda site: site.z)):
         # if not i % 5 == 0 or i % 5 == 1:
+        # if i == 0:
+        #     continue
+        # i -= 1
         if vrun.is_spin:
-            dos_arr[i // 5 + 1] += np.concatenate((cdos.get_site_dos(j).densities[Spin.up], -cdos.get_site_dos(j).densities[Spin.down][::-1]))
-        else:
-            if i % 5 == 4:
+            dos_arr[i // repeat + 1] += np.concatenate((cdos.get_site_dos(j).densities[Spin.up], -cdos.get_site_dos(j).densities[Spin.down][::-1]))
+            if i % repeat == repeat - 1:
                 print(j.species_string, end='\n')
             else:
                 print(j.species_string, end='\t')
-            dos_arr[i // 5 + 1] += cdos.get_site_dos(j).get_smeared_densities(.15)[Spin.up]
-
-    np.savetxt('output.dat', dos_arr.transpose(), '%16.8E', delimiter='\t')
-
+        else:
+            dos_arr[i // repeat + 1] += cdos.get_site_dos(j).densities[Spin.up]
+            if i % repeat == repeat - 1:
+                print(j.species_string, end='\n')
+            else:
+                print(j.species_string, end='\t')
+    if repeat == 4:
+        np.savetxt('pt.dat', dos_arr.transpose(), '%16.8E', delimiter='\t')
+    else:
+        np.savetxt('lsmo.dat', dos_arr.transpose(), '%16.8E', delimiter='\t')
     # oxygen = sorted([r for r in s.sites if r.species_string == 'O'], key= lambda site: site.z)
     # asite = sorted([r for r in s.sites if r.species_string == 'Ti' or r.species_string == 'Mn'], key= lambda site: site.z)
+
+# %%

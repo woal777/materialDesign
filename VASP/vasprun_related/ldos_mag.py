@@ -4,16 +4,28 @@ import os
 import numpy as np
 
 if __name__ == '__main__':
+    os.chdir('/home/jinho93/interface/tin-hfo2/2.strain2tin/1.Cdoped/2.carbon/2.dos/again/44')
+    os.chdir('/home/jinho93/interface/tin-hfo2/2.strain2tin/1.Cdoped/3.down_carbon/2.opti/2.dos/again/44/ag')
+    os.chdir('/home/jinho93/interface/tin-hfo2/tetra/inteface-eng/ferro')
+    os.chdir('/home/jinho93/interface/tin-hfo2/tetra/inteface-eng/ferro/dos')
+    os.chdir('/home/jinho93/interface/tin-hfo2/tetra/inteface-eng/strain2sub/afm')
+    os.chdir('/home/jinho93/interface/tin-hfo2/tetra/inteface-eng/strain2sub/afm/22/dos/ag')
     vrun = Vasprun('vasprun.xml')
     s = vrun.final_structure
     cdos = vrun.complete_dos
-
+    n = 10
+    length = len(vrun.tdos.densities[Spin.up])
 #    spacing = 0.04
-    dos_arr = np.zeros((13 + 1, len(vrun.tdos.densities[Spin.up])))
-    dos_arr[0] = (vrun.tdos.energies - vrun.tdos.efermi)
+    if vrun.is_spin:
+        dos_arr = np.zeros((n, 2 * length))
+        dos_arr[0][:length] = (vrun.tdos.energies - vrun.tdos.efermi)
+        dos_arr[0][length:] = (vrun.tdos.energies - vrun.tdos.efermi)
+    else:
+        dos_arr = np.zeros((n, length))
+        dos_arr[0] = (vrun.tdos.energies - vrun.tdos.efermi)
     # l_ini = np.array([spacing * r - 1/ left / 2 for r in range(left)])
-    l_ini = np.linspace(.12, .88, 13)[:-1]
-    r_fin = np.linspace(.12, .88, 13)[1:]
+    l_ini = np.linspace(.38, .97, n)[:-1]
+    r_fin = np.linspace(.38, .97, n)[1:]
 #    l_ini = np.array([.19, .24, .29, .34, .40, .46, .52, .57, .62])
 #     r_fin = l_ini + spacing
 #     print(l_ini)
@@ -21,9 +33,9 @@ if __name__ == '__main__':
     for i in s.sites:
         for j in range(len(l_ini)):
             if l_ini[j] <= i.c < r_fin[j]:
-                dos_arr[j + 1] += cdos.get_site_dos(i).densities[Spin.up]
+                dos_arr[j + 1][:length] += cdos.get_site_dos(i).densities[Spin.up]
                 if vrun.is_spin:
-                    dos_arr[j + 1] += cdos.get_site_dos(i).densities[Spin.down]
+                    dos_arr[j + 1][length:] -= cdos.get_site_dos(i).densities[Spin.down]
     np.savetxt('output.dat', dos_arr.transpose(), '%16.8E')
 #    l_ini = np.array([spacing * r for r in range(right)]) + .499
 #    l_ini = []

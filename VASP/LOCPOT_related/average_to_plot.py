@@ -4,12 +4,6 @@ import matplotlib as mpl
 import numpy as np
 import os
 
-os.chdir('/home/ksrc5/FTJ/1.bfo/111-dir/junction/sto/vasp/vac/conf3/4.node03/dense_k_dos/again/2.parchg')
-os.chdir('/home/jinho93/oxides/perobskite/strontium-titanate/slab/nbsto/0.superlattice/1.locpot')
-os.chdir('/home/jinho93/oxides/perobskite/strontium-titanate/slab/nbsto/0.superlattice/2.Ti/1.dos')
-os.chdir('/home/jinho93/oxides/perobskite/strontium-titanate/slab/nbsto/0.superlattice/3.Ti_orig/1.dos')
-os.chdir('/home/jinho93/oxides/perobskite/strontium-titanate/slab/nbsto/0.superlattice/3.Ti_orig/2.core')
-os.chdir('/home/jinho93/oxides/perobskite/strontium-titanate/slab/nbsto/0.superlattice/3.Ti_orig/1.dos/1.right_orig')
 input_file = ''
 lattice_vector = 3.90821
 
