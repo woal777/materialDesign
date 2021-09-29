@@ -1,3 +1,18 @@
 {
-    "python.pythonPath": "/home/jinho93/miniconda3/envs/pymat/bin/python"
+    "python.pythonPath": "/home/jinho93/miniconda3/envs/pymat/bin/python",
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "164.125.41.142",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "homepage",
+            "username": "root",
+            "password": "5dsystemkor",
+            "database": "homepage"
+        }
+    ]
 }

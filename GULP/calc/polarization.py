@@ -1,50 +1,48 @@
-from pymatgen import Molecule, Element
+#%%
+
+from MDAnalysis.core.universe import Universe
 import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-def main():
-    p_arr = []
-    with open('lao.xyz') as f:
-        arr = f.readlines()
-        n_atom = int(arr[0])
-        print(n_atom)
-        n_atom += 2
-        num_shot = 100
-        for num_step in range(num_shot):
-            tmp = ''.join(arr[(n_atom * num_step):n_atom * (num_step + 1)])
-            m = Molecule.from_str(tmp, 'xyz')
-            p = np.zeros(3)
-            # La2 = [492, 493, 496, 497]
-            # La2 = [397, 398]
-            for j, i in enumerate(m.sites):
-                # if j in La2:
-                #     p += i.coords * 2
-                if i.specie == Element.Al:
-                    p += i.coords * 3
-                elif i.specie == Element.La:
-                    p += i.coords * 3
-                elif i.specie == Element.O:
-                    p += i.coords * -2
-                # else:
-                #     p -= i.coords * 2.04
-
-            p_arr.append(p)
-
-    p_arr = np.array(p_arr)
-    return p_arr, n_atom - 2
+# os.chdir('/home/jinho93/oxides/perobskite/lanthanum-aluminate/periodic_step/gulp/8.108/fix')
+os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/gulp/015/0/thick/4')
+# os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my015/from-gulp/421/test')
+p_arr = []
+u = Universe('lao.xyz')
+for trj in u.trajectory:
+    p = [0]
+    for atom, pos in zip(u.atoms, trj):
+        if atom.name == 'Al':
+            p += pos * 3
+        elif atom.name == 'La':
+            p += pos * 3
+        elif atom.name == "O":
+            p += pos * -2
+    p_arr.append(p)
+p_arr = np.array(p_arr)
 
 
-if __name__ == '__main__':
-    os.chdir('/home/jinho93/oxides/perobskite/lanthanum-aluminate/periodic_step/gulp/2.100/2.conf/nose-hoover')
-    p, n = main()
-    n //= 5
-    pz = p[:, 2]
-    e = 1.6e-19
-    a = 3.81127
-    vol = a ** 3
-    pz *= e / n / vol * 1e+20
-    np.savetxt('pz.dat', pz)
-    plt.plot(pz)
-    plt.show()
+n = len(u.atoms)
+n //= 5
+pz = p_arr[:, 2]
+e = 1.6e-19
+a = 3.81127
+vol = a ** 3
+pz *= e / n / vol * 1e+20
+np.savetxt('/home/jinho93/pz.dat', pz)
+
+
+
+#%%
+plt.plot(pz)
+plt.xlim(1495, 1503)
+plt.ylim(-0.1, 0.5)
+plt.show()
+plt.plot(pz)
+plt.xlim(0, 15)
+plt.ylim(-0.8, 0.8)
+
+# %%
+np.savetxt('/home/jinho93/n.dat', range(1500))
+# %%

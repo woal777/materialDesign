@@ -1,3 +1,4 @@
+#%%
 from pymatgen import PeriodicSite, Spin, Site
 from pymatgen.io.vasp import Vasprun
 import os
@@ -9,7 +10,7 @@ class ShellDos:
         self.vasprun = Vasprun('vasprun.xml')
         self.s = self.vasprun.final_structure
         self.complete_dos = self.vasprun.complete_dos
-        self.atom: PeriodicSite = self.s.sites[283]
+        self.atom: PeriodicSite = self.s.sites[45]
         self.shells = 5
 
     def total_dos(self):
@@ -17,7 +18,7 @@ class ShellDos:
         dos_arr[0] = (self.vasprun.tdos.energies - self.vasprun.tdos.efermi)
 
         for j in range(self.shells):
-            for i, _ in self.s.get_neighbors_in_shell(self.atom.coords, 2 * j + 3, 1):
+            for i, _ in self.s.get_neighbors_in_shell(self.atom.coords, 2 * j + 2, 2):
                 try:
                     dos_arr[j + 1] += self.complete_dos.get_site_dos(i).densities[Spin.up]
                     if self.vasprun.is_spin:
@@ -46,6 +47,9 @@ class ShellDos:
 
 
 if __name__ == '__main__':
-    os.chdir('/home/jinho93/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/from-2012/1.0ps')
+    os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my015/from-gulp/421')
+    os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my015/4/lvhar')
     s = ShellDos()
     s.total_dos()
+    print('oK')
+# %%

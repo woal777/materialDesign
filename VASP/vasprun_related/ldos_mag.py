@@ -4,12 +4,7 @@ import os
 import numpy as np
 
 if __name__ == '__main__':
-    os.chdir('/home/jinho93/interface/tin-hfo2/2.strain2tin/1.Cdoped/2.carbon/2.dos/again/44')
-    os.chdir('/home/jinho93/interface/tin-hfo2/2.strain2tin/1.Cdoped/3.down_carbon/2.opti/2.dos/again/44/ag')
-    os.chdir('/home/jinho93/interface/tin-hfo2/tetra/inteface-eng/ferro')
-    os.chdir('/home/jinho93/interface/tin-hfo2/tetra/inteface-eng/ferro/dos')
-    os.chdir('/home/jinho93/interface/tin-hfo2/tetra/inteface-eng/strain2sub/afm')
-    os.chdir('/home/jinho93/interface/tin-hfo2/tetra/inteface-eng/strain2sub/afm/22/dos/ag')
+    os.chdir('/home/jinho93/interface/tin-hfo2-tio2/vasp/ag')
     vrun = Vasprun('vasprun.xml')
     s = vrun.final_structure
     cdos = vrun.complete_dos

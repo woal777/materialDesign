@@ -1,3 +1,4 @@
+#%%
 from functools import reduce
 import macrodensity as md
 import matplotlib.pyplot as plt
@@ -6,23 +7,23 @@ import os
 
 
 def slice(fr, end, density):
-    vasp_pot, NGX, NGY, NGZ, Lattice = md.read_vasp_density('LOCPOT')
     grid_pot, electrons = md.density_2_grid(vasp_pot, NGX, NGY, NGZ)
 
     dim = [NGX, NGY, NGZ]
     dim = np.array(dim)
 
-    start = np.array('0.55000  0.75926  0.33745'.split()).astype(float)
-    to = np.array('0.55000  0.77161  0.46370'.split()).astype(float)
+    start = np.array('0.85000  0.48765  0.62783'.split()).astype(float)
+    to = np.array('0.85000  0.50000  0.75409'.split()).astype(float)
 
     # start = start * dim
     # to = to * dim
     new = []
     dis = []
     for n in np.linspace(fr, end, density):
-        tmp = (to - start) * n + start
-        new.append(tmp)
+        tmp = (to - start) * n
         dis.append(np.sqrt(sum((tmp * np.diagonal(Lattice)) ** 2)))
+        tmp += start
+        new.append(tmp)
 
     new = np.array(new)
     # new = new.round()
@@ -43,14 +44,17 @@ def slice(fr, end, density):
 
 
 if __name__ == '__main__':
-    os.chdir('/home/jinho93/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/from-2012/1.0ps/H')
-    os.chdir('/home/jinho93/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/from-2012/3.1ps/H/again')
-    x, y = slice(-2, 4.5, 200)
-    macro = md.macroscopic_average(y, 32, 1)
-    macro = md.macroscopic_average(macro, 32, 1)
-    plt.plot(x, y)
-    plt.plot(x, macro)
-    output = [x, y, macro]
-    output = np.array(output)
-    output = np.transpose(output)
-    np.savetxt('loc.dat', output)
+    os.chdir('/home/jinho93/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/from-2012/1.0ps')
+    vasp_pot, NGX, NGY, NGZ, Lattice = md.read_vasp_density('LOCPOT')
+
+
+#%%
+x, y = slice(-5, 1, 200)
+macro = md.macroscopic_average(y, 32, 1)
+# macro = md.macroscopic_average(macro, 32, 1)
+plt.plot(x, y)
+plt.plot(x, macro)
+output = [x, y, macro]
+output = np.array(output)
+output = np.transpose(output)
+np.savetxt('loc.dat', output)
