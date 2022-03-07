@@ -1,4 +1,3 @@
-#%%
 import os
 import numpy as np
 from pymatgen.io.vasp import Xdatcar
@@ -6,9 +5,7 @@ from pymatgen_diffusion.aimd.van_hove import RadialDistributionFunction, plt
 from pymatgen import Structure
 
 if __name__ == '__main__':
-    os.chdir('/home/jinho93/oxides/wurtzite/zno/vasp/6.155/dense/nbands/4')
     structure = Structure.from_file('POSCAR')
-    # rdf = RadialDistributionFunction(structures, indices=range(100), reference_indices=range(100))
     num = 4
     fig = plt.figure(0)
     output = np.zeros((201, num))
@@ -19,7 +16,6 @@ if __name__ == '__main__':
             if j.species_string == "O" and c / num < j.c < (c + 1) / num:
                 oxy.append(i)
         zn = []
-        print(c, oxy)
         for i, j in enumerate(structure.sites):
             if j.species_string == "Zn":
                 zn.append(i)

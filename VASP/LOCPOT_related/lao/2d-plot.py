@@ -8,7 +8,7 @@ import os
 
 
 os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my015/4/lvhar')
-os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my015/half-half/sten-my')
+# os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my015/half-half/sten-my')
 # os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my015/from-gulp/421/locpot')
 # os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my013/lao2/opti')
 # os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my013/lao2')
@@ -18,8 +18,7 @@ os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/
 # os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/stengel/013/lvhar')
 # os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my015/4/lvhar')
 # os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my015/from-gulp/421/opti/loc')
-# os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my015/7')
-# os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/stengel/015/7')
+# os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my015/model/wholly/from_180/disorder')
 loc = Locpot.from_file('LOCPOT')
 
 #%%
@@ -181,8 +180,8 @@ plt.plot([0, dat.shape[1]], [m_range,m_range])
 plt.plot([0, dat.shape[1]], [m_range + dis,m_range + dis])
 # arr = dat[200:200+51,:]
 arr = dat[m_range:m_range+dis,:]
-line = np.sum(arr, axis=0) / arr.shape[9]
-plt.imshow(dat)
+# line = np.sum(arr, axis=0) / arr.shape[9]
+# plt.imshow(dat)
 plt.show()
 plt.imshow(arr)
 # %%
@@ -197,9 +196,11 @@ plt.subplot(212)
 plt.imshow(arr)
 
 #%%
+plt.imshow(img_45)
+#%%
 from scipy import interpolate
-start = 300
-disp = 40
+start = 271 + 55
+disp = 55
 plt.imshow(img_45[:,start:start+disp])
 plt.show()
 line = np.sum(img_45[:, start:start+disp], axis=1) / disp
@@ -207,11 +208,41 @@ line = np.sum(img_45[:, start:start+disp], axis=1) / disp
 fnew = interpolate.interp1d(np.linspace(0,1, len(line)), line)
 ynew = fnew(np.linspace(0,1, int(len(line) * 0.75)))
 
-plt.plot(ynew[240:])
-np.savetxt('/home/jinho93/line.dat', ynew[195:])
+print(min(line))
+plt.plot(ynew)
+plt.show()
+# plt.plot(line)
+    # plt.show()
+# plt.plot(img_45[:,start + disp // 2])
+# plt.show()
+
+np.savetxt('/home/jinho93/line.dat', ynew[:])
 # interpolate.interp1d(np.range(np.sum(img_45[start:start+disp,:], axis=0) / disp))
 
 # %%
-plt.imshow(img_45[start:start+disp,150:150 + 302])
+start = 305
+disp = 55
+plt.imshow(img_45[start:start+disp,:])
+plt.show()
+line = np.sum(img_45[start:start+disp,:], axis=0) / disp
 
+fnew = interpolate.interp1d(np.linspace(0,1, len(line)), line)
+ynew = fnew(np.linspace(0,1, int(len(line) * 1)))
+
+plt.plot(ynew[18:])
+np.savetxt('/home/jinho93/line.dat', ynew[79:])
+print(min(line))
+
+# %%
+os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/my015/symm/opti/la2o3')
+
+from pymatgen.electronic_structure.plotter import DosPlotter
+from pymatgen.io.vasp import Vasprun
+dsp = DosPlotter()
+vrun = Vasprun('vasprun.xml')
+
+cdos = vrun.complete_dos
+
+dsp.add_dos('tot',vrun.tdos)
+dsp.show()
 # %%
