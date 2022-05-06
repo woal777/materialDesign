@@ -1,6 +1,6 @@
 <<<<<<< HEAD
 .idea/
-
+.vscode/
 =======
 
 # Created by https://www.gitignore.io/api/python,pycharm
@@ -54,7 +54,7 @@ cmake-build-*/
 *.png
 # IntelliJ
 out/
-
+plt
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
