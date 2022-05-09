@@ -7,6 +7,22 @@ from pymatgen.util.plotting import get_axarray_fig_plt
 from pymatgen.electronic_structure.dos import add_densities, Dos
 from pymatgen.electronic_structure.plotter import BSDOSPlotter, BSPlotterProjected
 
+
+def atomic_orb_dos(vrun:Vasprun, atoms, orbs):
+    cdos = vrun.complete_dos
+    if vrun.is_spin:
+        dos = Dos(cdos.efermi, cdos.energies, 
+                {Spin.up: np.zeros_like(cdos.energies), 
+                 Spin.down: np.zeros_like(cdos.energies)})
+    else:
+        dos = Dos(cdos.efermi, cdos.energies, 
+                {Spin.up: np.zeros_like(cdos.energies)})
+    for j in atoms:
+        for orb in orbs:
+            dos = dos.__add__(cdos.get_site_orbital_dos(j, orb))
+    return dos
+
+
 def integrate_dos(dos: Dos):
     inte_densities = {}
     de = dos.energies[1] - dos.energies[0]
@@ -141,13 +157,13 @@ if __name__ == '__main__':
     # sites = [s for s in vrun.final_structure.sites if s.species_string == 'O']
     # sites = vrun.final_structure.sites
     # print(summing_dos(vrun.complete_dos, sites, True))
-    dos = layer_dos_numsites(vrun, 2)
-    print(dos)
-    # np.savetxt('/home/jinho93/dos.dat', dos)
-    # dos = np.genfromtxt('/home/jinho93/dos.dat')
-    ldos_plot(dos,(0, 5), -8, 8)
-    write_dos(vrun.tdos, '/home/jinho93/out.dat')
     # ldos_plot(dos)
+    from pymatgen import Orbital
+    from pymatgen.electronic_structure.plotter import DosPlotter
+    dos = atomic_orb_dos(vrun, vrun.final_structure.sites, [Orbital.px])
+    dsp = DosPlotter()
+    dsp.add_dos('dos', dos)
+    dsp.show()    
     
 # %%
 
