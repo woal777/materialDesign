@@ -90,22 +90,6 @@ def plot_mu2(se, el1, el2, min, max, n, bound, write=False):
             plt.plot(x, yy, label=f'{i}')
         plt.legend()
         plt.show()
-# refs = []
-
-# refs.append(entry_from_path(o2_path))
-# refs.append(entry_from_path(La_path))
-# refs.append(entry_from_path(Al_path))
-
-
-# la2o3 = entry_from_path(La2O3_path)
-# g_la2o3 = la2o3.energy / la2o3.composition.get_integer_formula_and_factor()[1]
-
-# ucell_reduced_comp = la2o3.composition.reduced_composition
-
-# ref_entries_dict = {str(list(ref.composition.as_dict().keys())[0]): ref for ref in refs}
-
-# for el, ref in ref_entries_dict.items():
-#     g_la2o3 -= ucell_reduced_comp[el] * (ref.energy_per_atom)
 
 if __name__ == '__main__':
     pass

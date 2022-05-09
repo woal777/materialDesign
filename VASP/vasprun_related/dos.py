@@ -1,15 +1,42 @@
 #%%
-from pyrsistent import v
 import six
 import numpy as np
-from pymatgen import Structure, Spin, Site
-from pymatgen.io.vasp import Vasprun
+from pymatgen import Structure, Spin, Site, Element
+from pymatgen.io.vasp import Vasprun, BSVasprun
 from pymatgen.util.plotting import get_axarray_fig_plt
 from pymatgen.electronic_structure.dos import add_densities, Dos
-from pymatgen.electronic_structure.plotter import BSDOSPlotter
+from pymatgen.electronic_structure.plotter import BSDOSPlotter, BSPlotterProjected
+
+def integrate_dos(dos: Dos):
+    inte_densities = {}
+    de = dos.energies[1] - dos.energies[0]
+    for k, d in dos.densities.items():
+        densities = [0]
+        for i in d:
+            densities.append(sum(densities[0]) + i * de)
+        densities.pop(0)
+        inte_densities[k] = np.array(densities)
+    return Dos(dos.efermi, dos.energies, inte_densities)
+
+def layer_dos_numsites(vrun: Vasprun, n):
+    s: Structure
+    c = vrun.complete_dos
+    s = c.structure
+    sites = s.sites
+    dos = [None] * (n + 1)
+    dos[0] = c.energies - c.efermi
+    for i, site in enumerate(sorted(sites, key=lambda x: x.c)):
+        ind = int(i / len(sites) * n) + 1
+        print(ind)
+        if dos[ind] is None:
+            dos[ind] = c.get_site_dos(site).densities[Spin.up]
+        else:
+            dos[ind] += c.get_site_dos(site).densities[Spin.up]
+    dos = np.array(dos).transpose()
+    return(dos)
 
 
-def layer_dos(vrun: Vasprun, n, coords_range, sites=None):
+def layer_dos_coords(vrun: Vasprun, n, coords_range, sites=None):
     frm, to = coords_range
     s: Structure
     c = vrun.complete_dos
@@ -29,7 +56,7 @@ def layer_dos(vrun: Vasprun, n, coords_range, sites=None):
     dos = np.array(dos).transpose()
     return(dos)
     
-def ldos_plot(arr, xlim=None, frm=None, to=None):
+def ldos_plot(arr, xlim=None, frm=None, to=None, filled=False):
     num = len(arr[0])
     num -= 1
     ax_array, fig, plt = get_axarray_fig_plt(None, ncols=num, sharey=True)
@@ -42,7 +69,10 @@ def ldos_plot(arr, xlim=None, frm=None, to=None):
         i.axes.get_yaxis().set_visible(False)
     for i in range(num):
         fig.add_subplot(1, num, i + 1)
-        plt.plot(arr[:, i + 1], arr[:, 0])
+        if filled:
+            plt.fill_between(arr[:, i + 1], arr[:, 0], facecolor='orange', alpha=.5)
+        else:
+            plt.plot(arr[:, i + 1], arr[:, 0])
         if frm and to:
             plt.ylim((frm, to))
             if xlim:
@@ -58,9 +88,16 @@ def ldos_plot(arr, xlim=None, frm=None, to=None):
     return plt
 
 def write_dos(dos: Dos, filename='output.dat'):
-    arr = np.zeros((len(dos.energies), 2))
-    arr[:, 0] = dos.energies - dos.efermi
-    arr[:, 1] = dos.densities[Spin.up]
+
+    arr = np.zeros((len(dos.energies) * 2, 2))
+
+    if len(dos.densities.keys()) > 1:
+        arr[:, 0] = np.concatenate([dos.energies - dos.efermi, (dos.energies - dos.efermi)[::-1]])
+        arr[:, 1] = np.concatenate([dos.densities[Spin.up], -dos.densities[Spin.down][::-1]])
+    else:
+        arr[:, 0] = dos.energies - dos.efermi
+        arr[:, 1] = dos.densities[Spin.up]
+
     np.savetxt(filename, arr)
 
 def summing_dos(cdos, sites, is_spin=False):
@@ -80,11 +117,18 @@ def summing_dos(cdos, sites, is_spin=False):
         return sum(up[cdos.energies < cdos.efermi]) * step
 
 
-def bs_plot_simple(bandpath, dospath):
+def bsdos_plot_simple(bandpath, dospath):
     plt = BSDOSPlotter()
     bands = Vasprun(f"{bandpath}/vasprun.xml").get_band_structure(f"{bandpath}/KPOINTS", line_mode = True)
     dosrun = Vasprun(f"{dospath}/vasprun.xml")
     plt.get_plot(bands, dosrun.complete_dos).show()
+
+def bscolorplt(path, el_ordered):
+    vrun = BSVasprun(path+'/vasprun.xml', True, True)
+    bs = vrun.get_band_structure(path+'/KPOINTS')
+    plotter = BSPlotterProjected(bs)
+    plt = plotter.get_elt_projected_plots_color(elt_ordered=el_ordered)
+    plt.show()
 
 
 if __name__ == '__main__':
@@ -92,15 +136,19 @@ if __name__ == '__main__':
     path = '/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/bulk/hse/dos/'
     path = '/home/jinho93/new/oxides/fluorite/hfo2/kp/888/dos/'
     path = '/home/jinho93/new/oxides/perobskite/bfo/bcfo/dos/'
+    # path = '/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/bulk/hse/dos/'
     vrun = Vasprun(path + 'vasprun.xml')
-    s: Site
     # sites = [s for s in vrun.final_structure.sites if s.species_string == 'O']
-    sites = vrun.final_structure.sites
-    print(summing_dos(vrun.complete_dos, sites, True))
-    # dos = layer_dos(vrun, 10, .178, 0.703)
+    # sites = vrun.final_structure.sites
+    # print(summing_dos(vrun.complete_dos, sites, True))
+    dos = layer_dos_numsites(vrun, 2)
+    print(dos)
     # np.savetxt('/home/jinho93/dos.dat', dos)
     # dos = np.genfromtxt('/home/jinho93/dos.dat')
-    # ldos_plot(dos,(0, 10), -5, 5)
+    ldos_plot(dos,(0, 5), -8, 8)
+    write_dos(vrun.tdos, '/home/jinho93/out.dat')
     # ldos_plot(dos)
     
+# %%
+
 # %%
