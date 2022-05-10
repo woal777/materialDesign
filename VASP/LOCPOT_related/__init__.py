@@ -1,16 +1,7 @@
-#%%
 from pymatgen.io.vasp import Locpot
-import os
 import numpy as np
-import matplotlib.pyplot as plt
 
-# os.chdir('/home/jinho93/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/from-2012/1.0ps/har/')
-os.chdir('/home/jinho93/new/oxides/perobskite/lanthanum-aluminate/periodic_step/vasp/from-2012/1.0ps/har')
-loc = Locpot.from_file('LOCPOT')
-
-dat = np.sum(loc.data['total'], axis=0)
-
-class Circular:
+class Circular_average:
     periodic = True
 
     def __init__(self, r):
@@ -39,14 +30,3 @@ class Circular:
                     result[i, j] = np.sum(self.fil * arr[i:i+2 * self.radius + 1, j:j+2 * self.radius + 1])
         
         return result
-import time
-
-#%%
-
-t = time.time()
-c = Circular(5)
-smo = c.filtering(dat)
-plt.imshow(smo)
-
-print(time.time() - t)
-# %%

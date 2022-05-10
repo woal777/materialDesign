@@ -1,8 +1,22 @@
 #%%
 from matplotlib.pyplot import figure
+import xml.etree.ElementTree as ET
 from pymatgen.io.vasp import Outcar
 import numpy as np
 import os
+
+def cond(vrun='vasprun.xml'):
+    conductivity = []
+    with open(vrun) as stream:
+        for event, elem in ET.iterparse(stream):
+            tag = elem.tag
+            if tag == "conductivity":
+                for arr in elem.find('array').find('set').findall('r'):
+                    conductivity.append(arr.text.split())
+
+    conductivity = np.array(conductivity, dtype=float)
+    
+    return conductivity
 
 
 #%%
