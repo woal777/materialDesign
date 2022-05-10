@@ -1,9 +1,11 @@
+#%%
 from re import search
 import matplotlib.pyplot as plt
 import re
 from pymatgen import Structure
 import numpy as np
-
+from pymatgen.analysis.eos import EOS
+import os
 
 def chg_sum(outcar, structure, species):
     output = 0
@@ -62,3 +64,24 @@ def visualize_force(path, scale=10):
         # plt.xlim(0, 12)
         # plt.ylim(0, 40.8)
         plt.show()
+        
+def eos(dirs):
+    volumes, energies = [], []
+    ene_line = re.compile('(sigma->0)')
+
+    for i in dirs:
+        with open(f'{i}/OUTCAR') as outcar:
+            for l in outcar:
+                if ene_line.search(l):
+                    energies.append(float(l.split()[-1]))
+        s = Structure.from_file(f'{i}/POSCAR')
+        volumes.append(s.volume)
+
+    eos = EOS(eos_name='murnaghan')
+    eos_fit = eos.fit(volumes, energies)
+    return eos_fit
+
+if __name__ == '__main__':
+    os.chdir('/home/jinho93/battery/anode/silicon/72/0/eos')
+    print(eos(next(os.walk('.'))[1]).b0_GPa)
+# %%
