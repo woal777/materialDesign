@@ -36,3 +36,13 @@ WaveSuper = unfold(M=M, wavecar='WAVECAR')
 
 sw = WaveSuper.spectral_weight(kpath)
 ef = 4.8211
+
+
+EBS_scatter(kpath, cell, sw, nseg=30, eref=-4.01,
+        ylim=(-3, 4), 
+        factor=5)
+
+e0, sf = WaveSuper.spectral_function(nedos=4000)
+EBS_cmaps(kpath, cell, e0, sf, nseg=30, eref=-4.01,
+        show=False,
+        ylim=(-3, 4))
