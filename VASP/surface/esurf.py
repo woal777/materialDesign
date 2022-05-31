@@ -42,6 +42,7 @@ def plot_mu1_mu2(se, min, n):
 def plot_mu1(se, el1, el2, mu1, lbound, ubound, write=False):
     xmin = (lbound - 3 * mu1) / 2
     xmax = (ubound - 3 * mu1) / 2
+    print(xmin, xmax)
     x = np.linspace(xmin - 1, xmax + 1, 100)
     y = []
     for k in range(len(se)):
@@ -91,6 +92,35 @@ def plot_mu2(se, el1, el2, min, max, n, bound, write=False):
         plt.legend()
         plt.show()
 
+
+def plot_mu1_mu2(se, el1, el2, mu1, lbound, ubound, write=False):
+    xmin = (lbound - 3 * mu1) / 2
+    xmax = (ubound - 3 * mu1) / 2
+    print(xmin, xmax)
+    x = np.linspace(xmin - 1, xmax + 1, 100)
+    y = []
+    for k in range(len(se)):
+        tmp = np.zeros(len(x))
+        for ind, xx in enumerate(x):
+            if type(se[k]) == float:
+                tmp[ind] = (se[k])
+            else:
+                tmp[ind] = (se[k].subs(el1, mu1).subs(el2, xx))
+        y.append(tmp * 16)
+    
+    if write:
+        output = np.zeros((len(y) + 1, len(x)))
+        output[0,:] = x
+        output[1:, :] = np.array(y)
+        np.savetxt('output.dat', output.T)
+    else:
+        for i, yy in enumerate(y):
+            plt.plot([xmin] * 2, [-50, 50], '--', color='grey')
+            plt.plot([xmax] * 2, [-50, 50], '--', color='grey')
+            plt.plot(x, yy, label=f'{i}')
+        plt.legend()
+        plt.ylim(np.min(y) - 0.1, np.max(y) + 0.1)
+        plt.show()
 if __name__ == '__main__':
     pass
     
